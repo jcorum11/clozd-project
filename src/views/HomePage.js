@@ -2,7 +2,7 @@ import React, { Fragment, useEffect } from 'react'
 import Table from '../features/Table/Table'
 import Details from '../features/Details/Details'
 import { useDispatch, useSelector } from 'react-redux'
-import { selectIsDetails, fetchDetails, selectDetails } from '../features/Details/detailsSlice'
+import { selectIsDetails, fetchDetails } from '../features/Details/detailsSlice'
 
 const HomePage = () => {
   const dispatch = useDispatch()

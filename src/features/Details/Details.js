@@ -1,27 +1,36 @@
-import React, { Fragment } from 'react'
+ /** @jsxImportSource @emotion/react */
+import React, { Fragment, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
-import { selectDetails, selectSelectedDetails, setIsDetails } from './detailsSlice'
+import { selectSelectedDetails, setIsDetails } from './detailsSlice'
+import { css } from '@emotion/react'
 
 const Details = () => {
   const dispatch = useDispatch()
+  const [isHighlighted, setIsHighlighted] = useState(false)
   const details = useSelector(selectSelectedDetails)
-  console.log(details)
+  const { picture, location } = details
+  const { street, state, postcode } = location
   return (
     <Fragment>
-      <p onClick={() => dispatch(setIsDetails(false))}>Back</p>
+      <span css={isHighlighted && highlight} onClick={() => dispatch(setIsDetails(false))} onMouseEnter={() => setIsHighlighted(true)} onMouseLeave={() => setIsHighlighted(false)}>&lt; Back</span>
       <h1>Details</h1>
-      <img src={details.picture.large} alt="" />
+      <img src={picture.large} alt="" />
       <table>
         <tbody>
           <tr>
-            <td>{details.location.street.number} {details.location.street.name}</td>
-            <td>{details.location.state}</td>
-            <td>{details.location.postcode}</td>
+            <td>{street.number} {street.name}</td>
+            <td>{state}</td>
+            <td>{postcode}</td>
           </tr>
         </tbody>
       </table>
     </Fragment>
   )
 }
+
+const highlight = css`
+background-color: yellow;
+cursor: pointer;
+`
 
 export default Details

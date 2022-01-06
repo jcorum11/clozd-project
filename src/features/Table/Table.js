@@ -1,13 +1,16 @@
+ /** @jsxImportSource @emotion/react */
 import React, { Fragment } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useSelector } from 'react-redux'
 import { selectDetails } from '../Details/detailsSlice'
 import Row from '../Row/Row'
+import { css } from '@emotion/react'
 
 const Table = () => {
   const details = useSelector(selectDetails)
   let key = 0
   const getKey = () => {
-    return (key += 1).toString()
+    key += 1
+    return key.toString()
   }
   return (
     <Fragment>
@@ -15,14 +18,14 @@ const Table = () => {
       <table>
         <tbody>
           <tr>
-            <td>Name</td>
-            <td>Email</td>
-            <td>City</td>
-            <td>Country</td>
+            <td css={header}>Name</td>
+            <td css={header}>Email</td>
+            <td css={header}>City</td>
+            <td css={header}>Country</td>
           </tr>
           {
             details.map((row) => {
-              return <Row details={row} key={getKey} />
+              return <Row details={row} key={`detail-${getKey()}`} />
             })
           }
         </tbody>
@@ -30,5 +33,9 @@ const Table = () => {
     </Fragment>
   )
 }
+
+const header = css`
+font-weight: bold;
+`
 
 export default Table

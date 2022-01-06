@@ -1,11 +1,13 @@
-import React, { Fragment, useEffect, useState } from 'react'
+ /** @jsxImportSource @emotion/react */
+import React, { Fragment, useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { selectIsDetails, setIsDetails, setSelectedDetails } from '../Details/detailsSlice'
-// import { Link, Outlet } from 'react-router-dom';
+import { css } from '@emotion/react'
 
 const Row = ({ details }) => {
   const dispatch = useDispatch()
   const isDetails = useSelector(selectIsDetails)
+  const [isHighlighted, setIsHighlighted] = useState(false)
   const handleClick = (id) => {
     if (isDetails === false) {
       dispatch(setIsDetails(true))
@@ -14,19 +16,23 @@ const Row = ({ details }) => {
     }
     dispatch(setSelectedDetails(id))
   }
+  const { name, email, location, id } = details
+  const { city, country } = location
   return (
     <Fragment>
-      <tr>
-        {/* <Link to={`/details/${details}`}> */}
-        <td onClick={() => handleClick(details.id)}>{details.name.title} {details.name.first} {details.name.last}</td>
-        {/* </Link> */}
-        <td>{details.email}</td>
-        <td>{details.location.city}</td>
-        <td>{details.location.country}</td>
+      <tr css={isHighlighted && highlight} onClick={() => handleClick(id)} onMouseEnter={() => setIsHighlighted(true)} onMouseLeave={() => setIsHighlighted(false)}>
+        <td>{name.title} {name.first} {name.last}</td>
+        <td>{email}</td>
+        <td>{city}</td>
+        <td>{country}</td>
       </tr>
-      {/* <Outlet /> */}
     </Fragment>
   )
 }
+
+const highlight = css`
+background-color: yellow;
+cursor: pointer;
+`
 
 export default Row
