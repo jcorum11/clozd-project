@@ -1,10 +1,16 @@
 import React, { Fragment } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { selectDetails, selectSelectedDetails, setIsDetails } from './detailsSlice'
 
-const Details = ({handleClick, details}) => {
+const Details = () => {
+  const dispatch = useDispatch()
+  const details = useSelector(selectSelectedDetails)
+  console.log(details)
   return (
     <Fragment>
-      <p onClick={handleClick}>Back</p>
+      <p onClick={() => dispatch(setIsDetails(false))}>Back</p>
       <h1>Details</h1>
+      <img src={details.picture.large} alt="" />
       <table>
         <tbody>
           <tr>

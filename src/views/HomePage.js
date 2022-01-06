@@ -1,23 +1,20 @@
-import React, { Fragment, useState } from 'react'
-import Table from '../components/Table'
-import Details from '../components/Details'
+import React, { Fragment, useEffect } from 'react'
+import Table from '../features/Table/Table'
+import Details from '../features/Details/Details'
+import { useDispatch, useSelector } from 'react-redux'
+import { selectIsDetails, fetchDetails, selectDetails } from '../features/Details/detailsSlice'
 
 const HomePage = () => {
-  const [isDetails, setIsDetails] = useState(false)
-  const [personDetails, setPersonDetails] = useState({ gender: '', name: { title: '', first: '', last: '' }, email: '', location: { street: { number: NaN, name: '' }, state: '', city: '', postcode: NaN, country: '' } })
-  const handleClick = () => {
-    if (isDetails === false) {
-      setIsDetails(true)
-    } else if (isDetails === true) {
-      setIsDetails(false)
+  const dispatch = useDispatch()
+  const isDetails = useSelector(selectIsDetails)
+  useEffect(() => {
+    for (let index = 0; index < 10; index++) {
+      dispatch(fetchDetails(index))
     }
-  }
-  const handleDetails = (details) => {
-    setPersonDetails(details)
-  }
+  }, [])
   return (
     <Fragment>
-      {!isDetails ? <Table handleClick={handleClick} handleDetails={handleDetails}/> : <Details handleClick={handleClick} details={personDetails} />}
+      {!isDetails ? <Table /> : <Details />}
     </Fragment>
   )
 }
