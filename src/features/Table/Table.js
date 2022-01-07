@@ -1,13 +1,13 @@
  /** @jsxImportSource @emotion/react */
-import React, { Fragment } from 'react'
-import { useSelector } from 'react-redux'
-import { selectDetails } from '../Details/detailsSlice'
+import React, { Fragment, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
+import { addMoreDetails, selectCurrentDetails } from '../Details/detailsSlice'
 import Row from '../Row/Row'
 import { css } from '@emotion/react'
 
 const Table = () => {
-  const details = useSelector(selectDetails)
-  console.log(details)
+  const dispatch = useDispatch()
+  const details = useSelector(selectCurrentDetails)
   let key = 0
   const getKey = () => {
     key += 1
@@ -15,7 +15,7 @@ const Table = () => {
   }
   return (
     <Fragment>
-      <h1>Home</h1>
+      <h1>Home (Click "More" below!)</h1>
       <table>
         <tbody>
           <tr>
@@ -31,6 +31,7 @@ const Table = () => {
           }
         </tbody>
       </table>
+      <button onClick={() => dispatch(addMoreDetails(99))}>More</button>
     </Fragment>
   )
 }

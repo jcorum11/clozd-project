@@ -19,11 +19,11 @@ export const fetchDetails2000 = createAsyncThunk(
 export const detailSlice = createSlice({
   name: 'details',
   initialState: {
-    details: [],
+    allDetails: [],
     isDetails: false,
     selectedDetails: {},
-    response5000: [],
-    response2000: []
+    currentDetails: [],
+    currentDetailIndex: 0
   },
   // The `reducers` field lets us define reducers and generate associated actions
   reducers: {
@@ -31,26 +31,34 @@ export const detailSlice = createSlice({
       state.isDetails = action.payload
     },
     setSelectedDetails: (state, action) => {
-      state.details.forEach((detail) => {
+      state.allDetails.forEach((detail) => {
         if (detail.id === action.payload) {
           state.selectedDetails = detail
         }
       })
+    },
+    addMoreDetails: (state, action) => {
+      const currentDetails = state.allDetails.slice(state.currentDetailIndex, state.currentDetailIndex + action.payload)
+      currentDetails.forEach(detail => {
+        state.currentDetails.push(detail)
+      })
+      state.currentDetailIndex += action.payload
     }
   },
   extraReducers: (builder) => {
     builder.addCase(fetchDetails5000.fulfilled, (state, action) => {
-      action.payload.results.map(row => {
-        const lastId = getLastId(state.details)
-        row.id = lastId
-        state.details.push(row)
+      action.payload.results.map((row, index) => {
+        row.id = index
+        state.allDetails.push(row)
+        if (index < 100) {
+          state.currentDetails.push(row)
+        }
       })
     })
     builder.addCase(fetchDetails2000.fulfilled, (state, action) => {
-      action.payload.results.map(row => {
-        const lastId = getLastId(state.details)
-        row.id = lastId
-        state.details.push(row)
+      action.payload.results.map((row, index) => {
+        row.id = index + 5000
+        state.allDetails.push(row)
       })
     })
   }
@@ -66,10 +74,11 @@ const getLastId = (rows) => {
   return lastId
 }
 
-export const { setIsDetails, setSelectedDetails } = detailSlice.actions
+export const { setIsDetails, setSelectedDetails, addMoreDetails } = detailSlice.actions
 
-export const selectDetails = state => state.details.details
+export const selectDetails = state => state.details.allDetails
 export const selectIsDetails = state => state.details.isDetails
 export const selectSelectedDetails = state => state.details.selectedDetails
+export const selectCurrentDetails = state => state.details.currentDetails
 
 export default detailSlice.reducer
