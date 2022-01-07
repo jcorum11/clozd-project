@@ -7,6 +7,7 @@ import { css } from '@emotion/react'
 
 const Table = () => {
   const details = useSelector(selectDetails)
+  console.log(details)
   let key = 0
   const getKey = () => {
     key += 1

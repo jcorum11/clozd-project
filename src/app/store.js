@@ -4,5 +4,5 @@ import detailsReducer from '../features/Details/detailsSlice';
 export const store = configureStore({
   reducer: {
     details: detailsReducer,
-  },
+  }
 });

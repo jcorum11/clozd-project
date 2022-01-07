@@ -1,11 +1,18 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
-export const fetchDetails = createAsyncThunk(
-  'details/randomUser',
-  async (index) => {
-    const response = await fetch('https://randomuser.me/api/?inc=gender,name,location,email,picture')
-    const data = [await response.json(), index]
-    return data
+export const fetchDetails5000 = createAsyncThunk(
+  'details/randomUser5000',
+  async () => {
+    const response = await fetch('https://randomuser.me/api/?results=5000')
+    return await response.json()
+  }
+)
+
+export const fetchDetails2000 = createAsyncThunk(
+  'details/randomUser2000',
+  async () => {
+    const response = await fetch('https://randomuser.me/api/?results=2000')
+    return await response.json()
   }
 )
 
@@ -14,7 +21,9 @@ export const detailSlice = createSlice({
   initialState: {
     details: [],
     isDetails: false,
-    selectedDetails: {}
+    selectedDetails: {},
+    response5000: [],
+    response2000: []
   },
   // The `reducers` field lets us define reducers and generate associated actions
   reducers: {
@@ -30,14 +39,32 @@ export const detailSlice = createSlice({
     }
   },
   extraReducers: (builder) => {
-    builder.addCase(fetchDetails.fulfilled, (state, action) => {
-      const [response, index] = action.payload
-      const details = response.results[0]
-      details.id = index
-      state.details.push(details)
+    builder.addCase(fetchDetails5000.fulfilled, (state, action) => {
+      action.payload.results.map(row => {
+        const lastId = getLastId(state.details)
+        row.id = lastId
+        state.details.push(row)
+      })
+    })
+    builder.addCase(fetchDetails2000.fulfilled, (state, action) => {
+      action.payload.results.map(row => {
+        const lastId = getLastId(state.details)
+        row.id = lastId
+        state.details.push(row)
+      })
     })
   }
 })
+
+const getLastId = (rows) => {
+  let lastId
+  if (!rows[rows.length - 1]) {
+    lastId = 0
+  } else {
+    lastId = rows[rows.length - 1].id
+  }
+  return lastId
+}
 
 export const { setIsDetails, setSelectedDetails } = detailSlice.actions
 
